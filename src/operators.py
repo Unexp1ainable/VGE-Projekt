@@ -1,5 +1,7 @@
+from typing import List
 import bpy
 import bmesh
+from bmesh.types import BMVert, BMEdge
 from bpy.types import Operator
 
 class ObjectMoveX(Operator):
@@ -22,14 +24,66 @@ class TestOperator(Operator):
     bl_label = "Test"
     bl_options = {'REGISTER', 'UNDO'}
 
+    def sortEdgeLoop(self, selected: List[BMEdge]):
+        if len(selected) < 3:
+            raise Exception("At least 3 edges must be selected")
 
+        firstEdge = selected[0]
+        connectedOrder = [firstEdge]
+        currEdge = firstEdge
+        selected = selected[1:]
+        isFirstEdge = True # only one vertex is processed when processing first edge
+
+        while selected:
+            vert : BMVert
+            atLeastOneEdgeFound = False
+            for vert in currEdge.verts:
+                shouldEnd = False
+                for edge in vert.link_edges:
+                    if edge != currEdge:
+                        if edge in selected:
+                            if shouldEnd:
+                                raise Exception("More than 2 edges connected to the selected vertex")
+                            connectedOrder.append(edge)
+                            currEdge = edge
+                            selected.remove(currEdge)
+                            shouldEnd = True
+                            atLeastOneEdgeFound = True
+                            
+                # only one vertex is processed when processing first edge
+                if isFirstEdge:
+                    isFirstEdge = False
+                    break
+
+            if not atLeastOneEdgeFound:
+                raise Exception("Selected edges do not form edge loop")
+
+        # check first-last connectivity
+        last = connectedOrder[-1]
+        isClosed = False
+        for vertex in firstEdge.verts:
+            for edge in vertex.link_edges:
+                if edge == last:
+                    isClosed = True
+                    break
+
+        if not isClosed:
+            raise Exception("Selected edges do not form a closed loop")
+        
+        return connectedOrder
+
+        
     def execute(self, context):
-        bpy.ops.object.mode_set(mode='EDIT')
-        
         mesh = bmesh.from_edit_mesh(context.object.data)
-        for vert in mesh.verts:
-            print(vert)
-            vert.co.x += 1
-        
+        selected = []
+        for edge in mesh.edges:
+            edge : BMEdge
+            if edge.select:
+                selected.append(edge)
+
+        sortedEdgeLoop = self.sortEdgeLoop(selected)
+
         bpy.ops.object.mode_set(mode='OBJECT')
+        bpy.ops.object.mode_set(mode='EDIT')
+
         return {'FINISHED'}

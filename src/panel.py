@@ -8,7 +8,7 @@ class AddonPanel(Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "VGE Addon"
-    bl_context = "objectmode"
+    bl_context = "mesh_edit"
 
     def draw(self, context):
         layout = self.layout

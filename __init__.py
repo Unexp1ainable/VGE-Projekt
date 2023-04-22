@@ -10,7 +10,7 @@ bl_info = {
     "blender": (2, 80, 0),
     "version": (1, 0, 0),
     "category": "Object",
-    "location": "View3D > UI > Unity Batch FBX Export",
+    "location": "View3D > UI > VGElocation",
 }
 
 classes = (ObjectMoveX, TestOperator, AddonPanel)
