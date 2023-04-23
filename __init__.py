@@ -1,7 +1,16 @@
 import bpy
 
 from .src.operators import *
-from .src.panel import AddonPanel
+from .src.panel import AddonPanel, PlaceholderProperties
+from bpy.types import Panel, PropertyGroup, Scene, WindowManager
+from bpy.utils import register_class
+
+from bpy.props import (
+    IntProperty,
+    EnumProperty,
+    StringProperty,
+    PointerProperty,
+)
 
 bl_info = {
     "name": "VGE Addon",
@@ -13,24 +22,21 @@ bl_info = {
     "location": "View3D > UI > VGElocation",
 }
 
-classes = (ObjectMoveX, TestOperator, AddonPanel)
-
-def menu_func(self, context):
-    self.layout.operator(ObjectMoveX.bl_idname)
+classes = (TestOperator, AddonPanel, PlaceholderProperties)
 
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
 
-    bpy.types.VIEW3D_MT_object.append(menu_func)  # Adds the new operator to an existing menu.
+    Scene.placeholder = PointerProperty(type=PlaceholderProperties)
 
 
 def unregister():
-    for c in classes:
+    for c in reversed(classes):
         bpy.utils.unregister_class(c)
-
-    bpy.types.VIEW3D_MT_object.remove(menu_func)  # Removes the new operator to an existing menu.
+    del Scene.placeholder
+    
 
 
 if __name__ == "__main__":

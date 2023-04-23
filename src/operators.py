@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List
 import bpy
 import bmesh
@@ -5,21 +6,7 @@ from bmesh.types import BMVert, BMEdge
 from bpy.types import Operator
 from .alg import *
 
-class ObjectMoveX(Operator):
-    """My Object Moving Script"""      # Use this as a tooltip for menu items and buttons.
-    bl_idname = "object.move_x"        # Unique identifier for buttons and menu items to reference.
-    bl_label = "Move X by One"         # Display name in the interface.
-    bl_options = {'REGISTER', 'UNDO'}  # Enable undo for the operator.
 
-    def execute(self, context):        # execute() is called when running the operator.
-
-        # The original script
-        scene = context.scene
-        for obj in scene.objects:
-            obj.location.x += 1.0
-
-        return {'FINISHED'}            # Lets Blender know the operator finished successfully.
-    
 class TestOperator(Operator):
     bl_idname = "object.test_operator"
     bl_label = "Test"
@@ -82,7 +69,7 @@ class TestOperator(Operator):
 
         try:
             sortedVertexLoop = self.sortEdgeLoop(selected)
-            newFaces = triangulate(sortedVertexLoop, (0,1))
+            newFaces = triangulate(sortedVertexLoop, Strategy[context.scene.placeholder.dropdown_box])
             for v1,v2,v3 in newFaces:
                 mesh.faces.new((sortedVertexLoop[v1], sortedVertexLoop[v2], sortedVertexLoop[v3]))
         except Exception as e:
