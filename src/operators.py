@@ -3,6 +3,7 @@ import bpy
 import bmesh
 from bmesh.types import BMVert, BMEdge
 from bpy.types import Operator
+from .alg import *
 
 class ObjectMoveX(Operator):
     """My Object Moving Script"""      # Use this as a tooltip for menu items and buttons.
@@ -29,22 +30,27 @@ class TestOperator(Operator):
             raise Exception("At least 3 edges must be selected")
 
         firstEdge = selected[0]
-        connectedOrder = [firstEdge]
+        connectedOrder = list(firstEdge.verts).copy()
+        currVert = connectedOrder[1]
         currEdge = firstEdge
         selected = selected[1:]
         isFirstEdge = True # only one vertex is processed when processing first edge
 
         while selected:
-            vert : BMVert
             atLeastOneEdgeFound = False
+            vert : BMVert
+            shouldEnd = False
             for vert in currEdge.verts:
-                shouldEnd = False
+                if vert != currVert:
+                    continue
+                
                 for edge in vert.link_edges:
                     if edge != currEdge:
                         if edge in selected:
                             if shouldEnd:
                                 raise Exception("More than 2 edges connected to the selected vertex")
-                            connectedOrder.append(edge)
+                            currVert = edge.verts[0] if edge.verts[0] != vert else edge.verts[1]
+                            connectedOrder.append(currVert)
                             currEdge = edge
                             selected.remove(currEdge)
                             shouldEnd = True
@@ -59,16 +65,9 @@ class TestOperator(Operator):
                 raise Exception("Selected edges do not form edge loop")
 
         # check first-last connectivity
-        last = connectedOrder[-1]
-        isClosed = False
-        for vertex in firstEdge.verts:
-            for edge in vertex.link_edges:
-                if edge == last:
-                    isClosed = True
-                    break
-
-        if not isClosed:
+        if connectedOrder[0] != connectedOrder[-1]:
             raise Exception("Selected edges do not form a closed loop")
+        connectedOrder = connectedOrder[:-1]
         
         return connectedOrder
 
@@ -81,8 +80,16 @@ class TestOperator(Operator):
             if edge.select:
                 selected.append(edge)
 
-        sortedEdgeLoop = self.sortEdgeLoop(selected)
+        try:
+            sortedVertexLoop = self.sortEdgeLoop(selected)
+            newFaces = triangulate(sortedVertexLoop, (0,1))
+            for v1,v2,v3 in newFaces:
+                mesh.faces.new((sortedVertexLoop[v1], sortedVertexLoop[v2], sortedVertexLoop[v3]))
+        except Exception as e:
+            self.report({"ERROR"}, str(e))
 
+        bmesh.update_edit_mesh(context.object.data)
+        # only way to update 3DView I found
         bpy.ops.object.mode_set(mode='OBJECT')
         bpy.ops.object.mode_set(mode='EDIT')
 
