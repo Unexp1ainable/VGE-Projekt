@@ -35,6 +35,7 @@ class PlaceholderProperties(PropertyGroup):
         items=(
             (Strategy.DELAUNAY.name, "DeLaunay", "Enforce DeLaunay triangles"),
             (Strategy.MINIMUM_AREA.name, "Minimum area", "Minimize surface area of triangles"),
+            (Strategy.DELAUNAY_DIHEDRAL.name, "Max dihedral angle", "Optimize for maximal dihedral angle"),
         ),
         name="Optimization strategy",
         default=Strategy.DELAUNAY.name,
