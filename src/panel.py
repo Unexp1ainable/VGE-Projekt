@@ -1,16 +1,13 @@
-import bpy
-from bpy.types import Panel, PropertyGroup, Scene, WindowManager
-from bpy.utils import register_class
+from bpy.types import Panel, PropertyGroup
+from bpy.props import EnumProperty
+
 from .alg import Strategy
 
-from bpy.props import (
-    IntProperty,
-    EnumProperty,
-    StringProperty,
-    PointerProperty,
-)
 
 class AddonPanel(Panel):
+    """Gui panel
+    """
+
     bl_idname = "VGE_PT_TestPanel"
     bl_label = "VGE Addon"
     bl_space_type = 'VIEW_3D'
@@ -23,19 +20,23 @@ class AddonPanel(Panel):
         row = layout.row()
         row.label(text="Optimization strategy")
         row = layout.row()
-        placeholder = context.scene.placeholder
+        placeholder = context.scene.costFunctionDropdownProperties
         row.prop(placeholder, "dropdown_box", text="")
         row = layout.row()
-        row.operator("object.test_operator", text="Test operator")
+        row.operator("object.triangulation_operator", text="Test operator")
 
 
 
-class PlaceholderProperties(PropertyGroup):
+class CostFunctionDropdownProperties(PropertyGroup):
+    """Contents of the dropdown box with triangulation strategies
+    """
+
     dropdown_box: EnumProperty(
         items=(
             (Strategy.DELAUNAY.name, "DeLaunay", "Enforce DeLaunay triangles"),
             (Strategy.MINIMUM_AREA.name, "Minimum area", "Minimize surface area of triangles"),
-            (Strategy.DELAUNAY_DIHEDRAL.name, "Max dihedral angle", "Optimize for maximal dihedral angle"),
+            (Strategy.DELAUNAY_DIHEDRAL_MAX.name, "Max dihedral angle", "Optimize for maximal dihedral angle"),
+            (Strategy.DELAUNAY_DIHEDRAL_MIN.name, "Min dihedral angle", "Optimize for minimal dihedral angle"),
         ),
         name="Optimization strategy",
         default=Strategy.DELAUNAY.name,

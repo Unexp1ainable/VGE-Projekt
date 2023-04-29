@@ -1,44 +1,35 @@
-import bpy
-
 from .src.operators import *
-from .src.panel import AddonPanel, PlaceholderProperties
-from bpy.types import Panel, PropertyGroup, Scene, WindowManager
-from bpy.utils import register_class
+from .src.panel import AddonPanel, CostFunctionDropdownProperties
 
-from bpy.props import (
-    IntProperty,
-    EnumProperty,
-    StringProperty,
-    PointerProperty,
-)
+import bpy
+from bpy.types import Scene 
+from bpy.props import PointerProperty
 
 bl_info = {
     "name": "VGE Addon",
-    "description": "Addon for VGE",
+    "description": "Addon for VGE project",
     "author": "VGE team",
-    "blender": (2, 80, 0),
+    "blender": (3, 0, 0),
     "version": (1, 0, 0),
     "category": "Object",
-    "location": "View3D > UI > VGElocation",
+    "location": "View3D > SidePanel > VGE Addon",
 }
 
-classes = (TestOperator, AddonPanel, PlaceholderProperties)
+classes = (TriangulationOperator, AddonPanel, CostFunctionDropdownProperties)
 
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
 
-    Scene.placeholder = PointerProperty(type=PlaceholderProperties)
+    Scene.costFunctionDropdownProperties = PointerProperty(type=CostFunctionDropdownProperties)
 
 
 def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
-    del Scene.placeholder
+    del Scene.costFunctionDropdownProperties
     
 
-
 if __name__ == "__main__":
-
     register()
