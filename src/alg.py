@@ -78,8 +78,14 @@ def costFunctionDihedral(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert, N
     """
     if not v4:
         return 0
-    n0 = (v1.co - v3.co).cross(v2.co - v3.co)
-    n1 = (v1.co - v4.co).cross(v2.co - v4.co)
+    n0: Vector
+    n1: Vector
+    n0 = (v1.co - v3.co).cross(v1.co - v2.co)
+    n1 = (v4.co - v1.co).cross(v4.co - v2.co)
+
+    if n0 == Vector((0.0, 0.0, 0.0)) or n1 == Vector((0.0, 0.0, 0.0)):
+        return PI
+    
     angle4 = abs(n0.angle(n1))
 
     if angle4 > PI:
