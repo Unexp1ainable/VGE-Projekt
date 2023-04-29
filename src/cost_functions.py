@@ -1,3 +1,15 @@
+"""
+=========================================================================
+Brief: Implementation of triangulation cost functions
+Authors:
+    Marek Mudroň (xmudro04)
+    Matej Kunda  (xkunda00)
+    Samuel Repka (xrepka07)
+File: cost_functions.py
+Date: April 2023
+=========================================================================
+"""
+
 from bmesh.types import BMVert
 from mathutils import Vector
 from typing import Union

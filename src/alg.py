@@ -1,3 +1,15 @@
+"""
+=========================================================================
+Brief: Implementation of the triangulation algorithm for VGE project
+Authors:
+    Marek Mudroň (xmudro04)
+    Matej Kunda  (xkunda00)
+    Samuel Repka (xrepka07)
+File: alg.py
+Date: April 2023
+=========================================================================
+"""
+
 from enum import Enum
 from functools import cache
 from typing import List, Tuple, Union

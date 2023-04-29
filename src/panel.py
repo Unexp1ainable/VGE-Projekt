@@ -1,3 +1,15 @@
+"""
+=========================================================================
+Brief: Blender GUI panel for VGE project
+Authors:
+    Marek Mudroň (xmudro04)
+    Matej Kunda  (xkunda00)
+    Samuel Repka (xrepka07)
+File: panel.py
+Date: April 2023
+=========================================================================
+"""
+
 from bpy.types import Panel, PropertyGroup
 from bpy.props import EnumProperty
 

@@ -1,3 +1,15 @@
+"""
+=========================================================================
+Brief: Implementation of the blender operator
+Authors:
+    Marek Mudroň (xmudro04)
+    Matej Kunda  (xkunda00)
+    Samuel Repka (xrepka07)
+File: operators.py
+Date: April 2023
+=========================================================================
+"""
+
 from .alg import *
 
 from typing import List

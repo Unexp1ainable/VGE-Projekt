@@ -1,3 +1,15 @@
+"""
+=========================================================================
+Brief: Initialization of the blender addon for VGE project
+Authors:
+    Marek Mudroň (xmudro04)
+    Matej Kunda  (xkunda00)
+    Samuel Repka (xrepka07)
+File: __init__.py
+Date: April 2023
+=========================================================================
+"""
+
 from .src.operators import *
 from .src.panel import AddonPanel, CostFunctionDropdownProperties
 
