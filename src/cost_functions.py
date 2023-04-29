@@ -35,6 +35,7 @@ def costFunctionDeLaunay(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert, N
     # more is better
     return (PI - min(angle1, angle2, angle3))
 
+
 def costFunctionMinimumArea(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert, None]):
     """Cost function for optimization goal of minimum triangle area
 
@@ -47,7 +48,7 @@ def costFunctionMinimumArea(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert
     Returns:
         float: Calculated weight
     """
-        
+
     # min area
     vec1 = v2.co - v3.co
     vec0 = v2.co - v1.co
@@ -76,7 +77,7 @@ def costFunctionDihedralMax(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert
 
     if n0 == Vector((0.0, 0.0, 0.0)) or n1 == Vector((0.0, 0.0, 0.0)):
         return PI
-    
+
     angle4 = abs(n0.angle(n1))
 
     if angle4 > PI:
@@ -107,7 +108,7 @@ def costFunctionDihedralMin(v1: BMVert, v2: BMVert, v3: BMVert, v4: Union[BMVert
 
     if n0 == Vector((0.0, 0.0, 0.0)) or n1 == Vector((0.0, 0.0, 0.0)):
         return PI
-    
+
     angle4 = abs(n0.angle(n1))
 
     if angle4 > PI:

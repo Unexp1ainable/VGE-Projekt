@@ -34,28 +34,28 @@ class TriangulationOperator(Operator):
         currVert = connectedOrder[1]
         currEdge = firstEdge
         selected = selected[1:]
-        isFirstEdge = True # only one vertex is processed when processing first edge
+        isFirstEdge = True  # only one vertex is processed when processing first edge
 
         while selected:
             atLeastOneEdgeFound = False
             shouldEnd = False
-            vert : BMVert
+            vert: BMVert
             for vert in currEdge.verts:
                 if vert != currVert:
                     continue
-                
+
                 for edge in vert.link_edges:
                     if edge != currEdge and edge in selected:
                         if shouldEnd:
                             raise VGEException("More than 2 edges connected to the selected vertex")
-                        
+
                         currVert = edge.verts[0] if edge.verts[0] != vert else edge.verts[1]
                         connectedOrder.append(currVert)
                         currEdge = edge
                         selected.remove(currEdge)
                         shouldEnd = True
                         atLeastOneEdgeFound = True
-                            
+
                 # only one vertex is processed when processing first edge
                 if isFirstEdge:
                     isFirstEdge = False
@@ -68,17 +68,16 @@ class TriangulationOperator(Operator):
         if connectedOrder[0] != connectedOrder[-1]:
             raise VGEException("Selected edges do not form a closed loop")
         connectedOrder = connectedOrder[:-1]
-        
+
         return connectedOrder
 
-        
     def execute(self, context):
         mesh = bmesh.from_edit_mesh(context.object.data)
 
         # extract selected edges
         selected = []
         for edge in mesh.edges:
-            edge : BMEdge
+            edge: BMEdge
             if edge.select:
                 selected.append(edge)
 
@@ -88,7 +87,7 @@ class TriangulationOperator(Operator):
             # acquire triangulated faces
             newFaces = triangulate(sortedVertices, Strategy[context.scene.costFunctionDropdownProperties.dropdown_box])
             # create new faces
-            for v1,v2,v3 in newFaces:
+            for v1, v2, v3 in newFaces:
                 mesh.faces.new((sortedVertices[v1], sortedVertices[v2], sortedVertices[v3]))
         except VGEException as e:
             self.report({"ERROR"}, str(e))

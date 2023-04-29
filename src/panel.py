@@ -26,7 +26,6 @@ class AddonPanel(Panel):
         row.operator("object.triangulation_operator", text="Test operator")
 
 
-
 class CostFunctionDropdownProperties(PropertyGroup):
     """Contents of the dropdown box with triangulation strategies
     """

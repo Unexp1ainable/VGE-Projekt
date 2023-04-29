@@ -2,7 +2,7 @@ from .src.operators import *
 from .src.panel import AddonPanel, CostFunctionDropdownProperties
 
 import bpy
-from bpy.types import Scene 
+from bpy.types import Scene
 from bpy.props import PointerProperty
 
 bl_info = {
@@ -29,7 +29,7 @@ def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
     del Scene.costFunctionDropdownProperties
-    
+
 
 if __name__ == "__main__":
     register()
