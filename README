@@ -1,0 +1,16 @@
+Požiadavky na fungovanie:
+- Blender 3.5.
+- Python 3 s knižnicami bpy, bmesh, numpy.
+
+Návod na spustenie:
+
+Najprv je nutné pripojiť k Blendru vytvorený addon. To je možné urobiť nasledovným spôsobom:
+1.	Prejdite do okna Edit → Preferences → Add-ons.
+2.	Kliknite na tlačidlo install a vyberte cestu k .zip súboru s addonom.
+3.	Následne zo zoznamu povoľte vytvorený addon s názvom „VGE Addon“.
+ 
+Po úspešnom pripojení addonu do Blendru sa v edit móde po stlačení klávesy N zobrazí na pravom 
+boku panel, kde po kliknutí na tlačidlo VGE Addon sa zobrazí panel s výberom metódy a tlačidlom Start. 
+Užívateľ následne musí vybrať všetky vertexy polygónu ktorý chce triangulovať, vybrať metódu a po 
+stlačení tlačidla Start sa algoritmus spustí.
+ 
